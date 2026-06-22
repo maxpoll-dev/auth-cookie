@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Generator
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+// Data source
+datasource db {
+  provider = "postgresql"
+}
+
+// Clients
+enum UserRole {
+  ADMIN
+  CLIENT
+}
+
+// Users
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         UserRole @default(CLIENT)
+  firstName    String?  @map("first_name")
+  lastName     String?  @map("last_name")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+}
